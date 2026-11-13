@@ -86,3 +86,9 @@ Bài học ở đây là quy tắc rút ra khi chạy thí nghiệm và hạ t�
 - Inventory 13/11: listing còn có placeholder không `ref` (ngày mặc định 2010-04-01). Gửi status tới slug rỗng gây 403,
   loại nhầm 9 account rồi plan không đủ slot. Bỏ placeholder không định danh trước query; status lỗi trên ref thật vẫn UNKNOWN.
   Regression 2 case (placeholder + ref thật; query timeout không biến thành account rảnh) PASS.
+- Retry r2 13/11: ref thật cũng gặp HTTP429/404; quét 4 account × 4 status đồng thời gây rate limit.
+  Chuyển status sang tuần tự, 2 account survey song song, retry read HTTP429 có giới hạn (10/20 s), hết retry vẫn UNKNOWN.
+  Reprobe minhtriethihi: rate-limited một read, retry thành công, inventory đầy đủ/busy0.
+- Plan không được hủy toàn batch vì chưa đủ account đọc được: khóa phần đã xác minh, giữ method còn lại trong `deferred`.
+  Collector thử cấp account mới cho deferred mỗi tick 1.200 s, kiểm lại quota/slot trước push; source/scientific config giữ nguyên.
+  Test allocation một account/quota thiếu, deferred chỉ launch khi inventory đọc được: PASS.

@@ -24,7 +24,7 @@ Code `core/` và `methods/` chép từ v2. Chỉ phần phụ thuộc kiến tr�
 
 ## Trạng thái
 
-Kiểm 13/11/2026 08:50 VN: local smoke + 26 test PASS; chuẩn bị push/launch.
+Kiểm 13/11/2026 09:23 VN: smoke + 37 test PASS; code public đã push; sửa rate-limit inventory, chuẩn bị controller retry.
 Xem [bàn giao sống](docs/operations/continue.md). Kết quả: [results](docs/research/results.md).
 
 ## Cần biết → mở

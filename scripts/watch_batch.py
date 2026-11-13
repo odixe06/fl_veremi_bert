@@ -30,8 +30,8 @@ def first_round():
     """Read exact run IDs, once r1 exists; live timing evidence, not final artifact audit."""
     import wandb
     api = wandb.Api(timeout=30)
-    plan = json.loads((ROOT / "runs/batch/plan.json").read_text())
-    for row in plan["rows"]:
+    rows = [json.loads(p.read_text()) for p in sorted((ROOT / "runs/batch").glob("*.intent"))]
+    for row in rows:
         if not (ROOT / "runs/batch" / f"{row['slug']}.pushed").exists():
             continue
         try:

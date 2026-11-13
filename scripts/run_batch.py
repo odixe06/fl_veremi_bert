@@ -67,21 +67,24 @@ def plan():
     assert not f.exists(), "plan locked"
     q = {a: h for a, h in quota().items() if a not in EXCLUDE}
     live = {}
-    with ThreadPoolExecutor(max_workers=4) as pool:
+    with ThreadPoolExecutor(max_workers=2) as pool:
         futures = {a: pool.submit(inventory, a) for a, h in q.items() if h >= MIN_SESSION * MARGIN}
         for a, future in futures.items():
             try:
                 live[a] = future.result()
                 print("INVENTORY", a, "busy", len(live[a]["busy"]), flush=True)
-            except (subprocess.SubprocessError, ValueError):
-                print("SKIP inventory unknown", a, flush=True)
+            except (subprocess.SubprocessError, ValueError) as exc:
+                detail = next((s for s in (getattr(exc, "stderr", "") or "").splitlines() if s.startswith("STATUS_UNKNOWN ")), "")
+                print("SKIP inventory unknown", a, detail, flush=True)
     # Existing projects retain their account quota as well as their occupied slots.
     q = {a: min(q[a], s["gpu_left"]) for a, s in live.items() if not s["busy"]}
-    left, slots, rows = {a: h / MARGIN for a, h in q.items()}, {a: 2 for a in q}, []
+    left, slots, rows, deferred = {a: h / MARGIN for a, h in q.items()}, {a: 2 for a in q}, [], []
     for m, extra, hrs in sorted(METHODS, key=lambda t: -t[2]):
         need = hrs * FACTOR + SETUP + (CANPERFL_H * FACTOR + SETUP if m == "fedavg" else 0)
         ok = [a for a in left if slots[a] > 0 and left[a] >= MIN_SESSION]
-        assert ok, ("no account for", m)
+        if not ok:
+            deferred.append(dict(slug=slug(m), run=slug(m), method=m, set=extra, part=1, est_hours=round(need, 2)))
+            continue
         fit = [a for a in ok if left[a] >= min(need, CAP)]
         a = min(fit, key=lambda a: left[a]) if fit else max(ok, key=lambda a: left[a])   # tightest full fit, else largest
         budget = math.floor(min(CAP, left[a], need) * 100) / 100
@@ -91,9 +94,10 @@ def plan():
                          est_hours=round(need, 2)))
     OUT.mkdir(parents=True, exist_ok=True)
     f.write_text(json.dumps({"head": sh(["git", "rev-parse", "HEAD"]).strip(), "quota": q, "inventory": live, "factor": FACTOR,
-                             "rows": rows}, indent=1))
+                             "rows": rows, "deferred": deferred}, indent=1))
     for r in rows:
         print(r["account"], r["slug"], "budget", r["max_hours"], "est", r["est_hours"])
+    print("DEFERRED", [r["method"] for r in deferred], flush=True)
 
 
 def push(r, head):
@@ -182,9 +186,50 @@ def launch():
             push(r, p["head"])
 
 
+def launch_deferred(p, rows):
+    """Assign unlaunched methods when an account becomes readable/free; keep the locked scientific source."""
+    pending = [r for r in p.get("deferred", []) if not (OUT / f"{r['slug']}.intent").exists()]
+    if not pending:
+        return
+    q = quota()
+    available = {}
+    for account, hours in sorted(q.items(), key=lambda x: -x[1]):
+        if account in EXCLUDE or hours < MIN_SESSION * MARGIN:
+            continue
+        reserved = sum(x["max_hours"] for x in rows.values() if x["account"] == account
+                       and not (OUT / f"{x['slug']}.done").exists())
+        if hours / MARGIN - reserved < MIN_SESSION:
+            continue
+        try:
+            live = inventory(account)
+        except (subprocess.SubprocessError, ValueError):
+            print("WAIT inventory unknown", account, flush=True)
+            continue
+        if live["busy"]:
+            continue
+        left = min(hours, live["gpu_left"]) / MARGIN - reserved
+        if left >= MIN_SESSION:
+            available[account] = left
+    slots = {a: 2 - sum(1 for x in rows.values() if x["account"] == a
+                       and not (OUT / f"{x['slug']}.done").exists()) for a in available}
+    for r in pending:
+        candidates = [a for a, h in available.items() if h >= MIN_SESSION and slots[a] > 0]
+        if not candidates:
+            print("WAIT deferred", r["method"], "quota/slots/inventory", flush=True)
+            continue
+        account = max(candidates, key=available.get)
+        budget = math.floor(min(CAP, available[account], r["est_hours"]) * 100) / 100
+        assigned = dict(r, account=account, max_hours=budget)
+        push(assigned, p["head"])
+        rows[assigned["slug"]] = assigned
+        available[account] -= budget
+        slots[account] -= 1
+
+
 def collect():
     """One pass, no loop. Re-run until it prints ALL_TERMINAL."""
     p, rows = sessions()
+    launch_deferred(p, rows)
     st = {s: status(r) for s, r in rows.items() if (OUT / f"{s}.pushed").exists() and not (OUT / f"{s}.done").exists()}
     for s, v in st.items():
         if v in ("COMPLETE", "ERROR", "CANCEL"):
