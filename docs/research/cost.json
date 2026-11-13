@@ -1,0 +1,140 @@
+{
+ "model": "FeatureBERT",
+ "forward_flops_per_row": 10225664,
+ "methods": {
+  "fedavg": {
+   "client_flops_per_row": 40022016.0,
+   "server_flops_per_round_toy": 0,
+   "n_params": 77904,
+   "payload_bytes": {
+    "down": 311616,
+    "up": 311616
+   },
+   "x_forward": 3.9138794312036853
+  },
+  "fedprox": {
+   "client_flops_per_row": 40022016.0,
+   "server_flops_per_round_toy": 0,
+   "n_params": 77904,
+   "payload_bytes": {
+    "down": 311616,
+    "up": 311616
+   },
+   "x_forward": 3.9138794312036853
+  },
+  "afpha": {
+   "client_flops_per_row": 40022016.0,
+   "server_flops_per_round_toy": 0,
+   "n_params": 77904,
+   "payload_bytes": {
+    "down": 311616,
+    "up": 311616
+   },
+   "x_forward": 3.9138794312036853
+  },
+  "fd_ids": {
+   "client_flops_per_row": 50247680.0,
+   "server_flops_per_round_toy": 0,
+   "n_params": 77904,
+   "payload_bytes": {
+    "down": 311616,
+    "up": 311616
+   },
+   "x_forward": 4.913879431203685
+  },
+  "lwfednids": {
+   "client_flops_per_row": 5880000.0,
+   "server_flops_per_round_toy": 0,
+   "n_params": 10194,
+   "payload_bytes": {
+    "down": 40776,
+    "up": 40776
+   },
+   "x_forward": 0.5750237832966153
+  },
+  "pfedes": {
+   "client_flops_per_row": 100521232.0,
+   "server_flops_per_round_toy": 0,
+   "n_params": 77904,
+   "payload_bytes": {
+    "down": 1404,
+    "up": 1404
+   },
+   "x_forward": 9.830288967053875
+  },
+  "fedproto": {
+   "client_flops_per_row": 40022016.0,
+   "server_flops_per_round_toy": 0,
+   "n_params": 77904,
+   "payload_bytes": {
+    "up": 4160,
+    "down": 4096,
+    "note": "up = prototypes of classes present + counts"
+   },
+   "x_forward": 3.9138794312036853
+  },
+  "fedtgp": {
+   "client_flops_per_row": 50247680.0,
+   "server_flops_per_round_toy": 1415839744,
+   "n_params": 77904,
+   "payload_bytes": {
+    "up": 4096,
+    "down": 4096
+   },
+   "x_forward": 4.913879431203685
+  },
+  "tinyproto": {
+   "client_flops_per_row": 50247680.0,
+   "server_flops_per_round_toy": 0,
+   "n_params": 77904,
+   "payload_bytes": {
+    "up": 448,
+    "down": 448,
+    "masks_once": 128
+   },
+   "x_forward": 4.913879431203685
+  },
+  "nilm": {
+   "client_flops_per_row": 80044032.0,
+   "server_flops_per_round_toy": 0,
+   "n_params": 77904,
+   "payload_bytes": {
+    "down": 311616,
+    "up": 311616
+   },
+   "x_forward": 7.827758862407371
+  },
+  "perfedskd": {
+   "client_flops_per_row": 60473344.0,
+   "server_flops_per_round_toy": 0,
+   "n_params": 77904,
+   "payload_bytes": {
+    "down": 311616,
+    "up": 311616,
+    "note": "selected devices only; see selected_frac per round"
+   },
+   "x_forward": 5.913879431203685
+  },
+  "apfed": {
+   "client_flops_per_row": 80044032.0,
+   "server_flops_per_round_toy": 0,
+   "n_params": 77904,
+   "payload_bytes": {
+    "down": 311616,
+    "up": 311616
+   },
+   "x_forward": 7.827758862407371
+  },
+  "v2x_htfl": {
+   "client_flops_per_row": 50284544.0,
+   "server_flops_per_round_toy": 4298752000,
+   "n_params": 82128,
+   "payload_bytes": {
+    "up": 4160,
+    "down": 4096,
+    "note": "up = prototypes of classes present + counts"
+   },
+   "x_forward": 4.917484478269578
+  }
+ }
+}
