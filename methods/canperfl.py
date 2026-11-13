@@ -53,8 +53,7 @@ class Method:
         return {"client": env.eval_clients(self.bank_p, self.bank_b), "global": env.eval_global(self.p, self.b)}
 
     def state(self):
-        return {"bank_p": self.bank_p.cpu(), "bank_b": self.bank_b.cpu(), "p": self.p.cpu(), "b": self.b.cpu()}
+        return {"bank_p": self.bank_p.cpu(), "bank_b": self.bank_b.cpu()}
 
     def load_state(self, s):
         self.bank_p, self.bank_b = s["bank_p"].to(self.env.dev), s["bank_b"].to(self.env.dev)
-        self.p, self.b = s["p"].to(self.env.dev), s["b"].to(self.env.dev)

@@ -82,7 +82,7 @@ def audit(root, support, seed=42, rounds=50):
         p = root / "models" / f"r{r:03d}.pt"
         assert p.is_file(), (r, "missing snapshot")
         snap = torch.load(p, map_location="cpu", weights_only=True)
-        assert snap
+        assert snap or cfg["method"] == "canperfl"  # v2 state contains only large per-client banks
         for k, t in snap.items():
             assert torch.is_tensor(t) and torch.isfinite(t).all(), (r, k)
         hashes[str(p.relative_to(root))] = sha256(p)
@@ -93,6 +93,7 @@ def audit(root, support, seed=42, rounds=50):
                         "all ten metrics/client quantiles/per-class F1 recomputed", "finite available snapshot tensors"],
                 limits=["No stored per-row predictions: cannot replay predictions into CMs",
                         "Small snapshots omit private parameter banks: cannot replay personalized inference",
+                        "CANPerFL snapshots may be empty: no weight-finiteness evidence for its omitted banks",
                         "Full rank resume states excluded from this pull; exact resume not certified",
                         "Dataset feature-content fingerprints absent from historical config"],
                 last_metrics=last, hashes=hashes)

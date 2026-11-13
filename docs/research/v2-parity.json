@@ -1,0 +1,96 @@
+{
+  "core/data.py": {
+    "check": "same executable AST",
+    "v2_sha256": "f4a9dc14f3002d0a1dcff774d9df8c9b41c3084396611276cd357e2e94540215",
+    "bert_sha256": "f4a9dc14f3002d0a1dcff774d9df8c9b41c3084396611276cd357e2e94540215"
+  },
+  "core/fl.py": {
+    "check": "same executable AST",
+    "v2_sha256": "ba58af2c6ea137f95b89bb6ccc8c9745fdc8f59eb708f1229eae0d40de5fa10a",
+    "bert_sha256": "ba58af2c6ea137f95b89bb6ccc8c9745fdc8f59eb708f1229eae0d40de5fa10a"
+  },
+  "core/optim.py": {
+    "check": "same executable AST",
+    "v2_sha256": "059988e800248771f83ae76cdb22bd0dee30e460c2e0b5893bed7a6557dfecdb",
+    "bert_sha256": "059988e800248771f83ae76cdb22bd0dee30e460c2e0b5893bed7a6557dfecdb"
+  },
+  "core/metrics.py": {
+    "check": "same executable AST",
+    "v2_sha256": "2e13613738cdb89570f5cdda25813b506e632cfd50fd1f2d50f2aa040da47917",
+    "bert_sha256": "2e13613738cdb89570f5cdda25813b506e632cfd50fd1f2d50f2aa040da47917"
+  },
+  "core/evaluate.py": {
+    "check": "same executable AST",
+    "v2_sha256": "096bb35eb2deb5f136583fcbf68f8d96219e98752763b057dd249e9d4ca89002",
+    "bert_sha256": "da4dfeb0b424639f84af0c7dfb7d212ca3f5e31f9be4a6fd12207b7e1d309a5e"
+  },
+  "methods/__init__.py": {
+    "check": "same executable AST",
+    "v2_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bert_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "methods/afpha.py": {
+    "check": "same executable AST",
+    "v2_sha256": "50a6103e2b71eefa5969e8f266b065798ade1d251f16143bea0f478b9aa83402",
+    "bert_sha256": "a3ef0cd7c69f14cd59d0332aee045b72ee7b7685a6f71ea262529daafb6f0bcc"
+  },
+  "methods/canperfl.py": {
+    "check": "same executable AST",
+    "v2_sha256": "d78de25003359650ae43289f962faf316e1df1c527768615e2117029168a269c",
+    "bert_sha256": "d78de25003359650ae43289f962faf316e1df1c527768615e2117029168a269c"
+  },
+  "methods/fd_ids.py": {
+    "check": "same executable AST",
+    "v2_sha256": "3d60c6a1725c01c1f3ecbbe94c9b28ef27543e316825e7f0788f980daf2a13ae",
+    "bert_sha256": "9220cf819a5654d9069bbec96df91de3e7b8283edc475ca91602563f45e189b4"
+  },
+  "methods/fedavg.py": {
+    "check": "same executable AST",
+    "v2_sha256": "bfe0f10ec2c3ec5b7cc90f3c1d44fe2eacb41142d287ba64133c01deb0f7d52b",
+    "bert_sha256": "bfe0f10ec2c3ec5b7cc90f3c1d44fe2eacb41142d287ba64133c01deb0f7d52b"
+  },
+  "methods/fedproto.py": {
+    "check": "same executable AST",
+    "v2_sha256": "68f4c3de177148945e1de0aea64739648ea32c1813adebbddc3b6576bd63a058",
+    "bert_sha256": "366616b1716188505a155c462f70e55c82cafc922e3e1a21d0bdceca6e0acd07"
+  },
+  "methods/fedprox.py": {
+    "check": "same executable AST",
+    "v2_sha256": "999ecf558a1dc7c2cca874d8068f68ced4bcd5d3cff060380580bcbeea94134c",
+    "bert_sha256": "999ecf558a1dc7c2cca874d8068f68ced4bcd5d3cff060380580bcbeea94134c"
+  },
+  "methods/fedtgp.py": {
+    "check": "same executable AST",
+    "v2_sha256": "10d2dfd972f458772821d5eb3ba64cdcf3a5f677ef4baad92b35eebf6619fbba",
+    "bert_sha256": "10d2dfd972f458772821d5eb3ba64cdcf3a5f677ef4baad92b35eebf6619fbba"
+  },
+  "methods/nilm.py": {
+    "check": "same executable AST",
+    "v2_sha256": "48c82b638af8965d3c32e27442816a43e2eba3eb1227d5154d75a9f0d09d2989",
+    "bert_sha256": "6916a5181983bee3f37b659748e051b91245347eb3279964d925d61dea3e0ac7"
+  },
+  "methods/perfedskd.py": {
+    "check": "same executable AST",
+    "v2_sha256": "071cd0f6de0db5e6378a7c4dc71abf96bf3bd7a5f1e6c1786ae5205af532ba72",
+    "bert_sha256": "071cd0f6de0db5e6378a7c4dc71abf96bf3bd7a5f1e6c1786ae5205af532ba72"
+  },
+  "methods/tinyproto.py": {
+    "check": "same executable AST",
+    "v2_sha256": "1bbf6b6e18f87a47f2ed52831c2709f8a3fbc001a7a2461c13a968ee62895ab4",
+    "bert_sha256": "1bbf6b6e18f87a47f2ed52831c2709f8a3fbc001a7a2461c13a968ee62895ab4"
+  },
+  "methods/apfed.py": {
+    "check": "same AST after classifier path head.5 -> head.",
+    "bert_sha256": "1d7d29661f49d6ed484c3e2a913a34311387e1d1df148a78a15aa86c6c306df8"
+  },
+  "methods/v2x_htfl.py": {
+    "check": "same AST after base model import/class substitution",
+    "bert_sha256": "535da4cd9cfa38297cc22174275681f25cc4b8927ad6f1b80c29853dd3d5b87e"
+  },
+  "methods/pfedes.py": {
+    "check": "Method AST identical; 7x11 proxy architecture and grouped Conv1d verified by tests/test_units.py"
+  },
+  "scripts/run_fl.py": {
+    "check": "same AST after model factory and DAGS_WIDTH argument substitution"
+  }
+}

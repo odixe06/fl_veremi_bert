@@ -25,4 +25,5 @@ Cột "model chấm": **toàn cục** = một model, chấm trên toàn test; **
 | 14 | fedproto | Tan 2022 (AAAI) | client_proto (headline) + head | prototype | representation = CLS (d = 64) |
 
 Đã loại: SCAFFOLD (owner 13/11), MobiHet/CBB (owner 13/11), centralized (owner 13/11).
+Đối chiếu code với v2: [parity](v2-parity.md) (20 kiểm tra AST PASS).
 Trạng thái chạy: [continue](../operations/continue.md). Kết quả: [results](results.md).

@@ -5,6 +5,8 @@ Artifact, state và process thật ưu tiên hơn tóm tắt.
 
 ## Đã xác minh
 
+- Owner nhắc lại: chỉ đổi model BERT. [Đối chiếu v2](../research/v2-parity.md): 20 kiểm tra AST PASS; CANPerFL đã trả về đúng code v2.
+
 - FeatureBERT FULL 77.904 tham số; grouped logits/CLS/gradient khớp reference fp64; θ⁰ seed 42 trùng centralized.
 - LwFedNIDS giữ tỉa 70%: d 20, head-dim 5, FFN 39, 10.194 tham số. Fix SDPA eager riêng head-dim < 8;
   regression CUDA eval dynamic tái hiện lỗi trước sửa, PASS sau sửa.
