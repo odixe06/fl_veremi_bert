@@ -36,7 +36,7 @@ def inventory(account):
         kernels = []
         while True:
             page = api.kernels.kernels_api_client.list_kernels(request)
-            kernels.extend(page.kernels)
+            kernels.extend(k for k in page.kernels if k.ref)  # deleted/hidden placeholders: empty ref, epoch 2010
             if not page.next_page_token:
                 break
             request.page_token = page.next_page_token

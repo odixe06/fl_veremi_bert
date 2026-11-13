@@ -12,7 +12,7 @@ Artifact, state và process thật ưu tiên hơn tóm tắt.
   regression CUDA eval dynamic tái hiện lỗi trước sửa, PASS sau sửa.
 - 13 method smoke dữ liệu thật PASS: 100 xe, compile, group_rows 2.048; FedAvg 3 round, còn lại 2 round.
   Log `runs/smoke_all.log`; LwFedNIDS sửa: `runs/sm_lwfednids_codex.log`. Đã kiểm CM + state đủ round, tensor hữu hạn.
-- `python -m pytest -q tests`: **32 PASS** sau gate notebook/resume, log `runs/pytest_prelaunch_final.log` (26 PASS trước đó: `runs/pytest_handoff.log`).
+- `python -m pytest -q tests`: **34 PASS** sau sửa inventory, log `runs/pytest_prelaunch_recovery.log` (32 PASS trước đó: `runs/pytest_prelaunch_final.log`) (26 PASS trước đó: `runs/pytest_handoff.log`).
 - Job `flb-handoff-verify-20261113`: succeeded 08:47:20 VN, supervisor PID 98324 đã kết thúc.
   Log `runs/codex/verify_handoff.log`; state `/home/odixe/.codex/long-jobs/jobs/flb-handoff-verify-20261113/state.json`.
   Owner thread `01a1d288-3551-7de3-9e0d-3b0b4f8b3401`; delivery queue đã nhận trong phiên này.
@@ -21,9 +21,22 @@ Artifact, state và process thật ưu tiên hơn tóm tắt.
 ## Đang chạy / bước tiếp
 
 GitHub public đã tạo và push: `https://github.com/odixe06/fl_veremi_bert` (commit đầu `6c5105c`).
-Không còn smoke local. Chưa launch Kaggle; đang khóa code gate vận hành rồi chạy plan → launch → watcher qua controller.
+Không còn smoke local. Controller lần đầu **failed ở plan**, chưa tạo plan hay push kernel. Nguyên nhân: placeholder listing ref rỗng gây 403 giả;
+đã sửa inventory + test. Worker cũng đã sửa sys.path trước import. Đang chuẩn bị retry controller bằng job ID mới.
 
-1. Push code gate vận hành (không đổi protocol), rồi controller chạy `plan` → `launch` → `watch_batch.py`.
+- Job cũ **flb-batch-s42-20261113**: FAILED, supervisor PID **108083** đã kết thúc; owner thread
+  `01a1d288-3551-7de3-9e0d-3b0b4f8b3401`; delivery **queue** (`auto-queue`).
+- Controller log `runs/batch-watch/controller.log`; durable job state:
+  `/home/odixe/.codex/long-jobs/jobs/flb-batch-s42-20261113/state.json`.
+- Worker `runs/codex/launch_batch.py`; pinned source `f57bb8e7a6f1e285ed4e1527f274a1d982baf304` đã push GitHub.
+- Plan khóa `runs/batch/plan.json`; phiên + version trong `.intent`; reply + marker `.pushed` mới xác nhận push.
+- Watcher sau launch: `scripts/watch_batch.py`, log `runs/batch-watch/watch.log`, state `runs/batch-watch/state.json`;
+  poll **1.200 s**. Dừng đánh thức ở r1 đầu quan sát được (`first_round.json`), lỗi, hoặc ALL_TERMINAL + audit.
+- Theo dõi: `tail -n 200 -F -- /home/odixe/project/fl_veremi_bert/runs/batch-watch/controller.log`.
+- Lần đầu không có kernel train; controller cancel trả not-needed-already-terminal. Completion lỗi đã được xử lý trong phiên này.
+
+1. Completion controller → đọc state/log + artifact thật. Nếu plan/launch lỗi, sửa đúng bước và giữ plan/intents; không push trùng.
+   R1 → ghi timing, nối watcher mới; chỉ thêm bằng chứng đo, giữ code baseline đồng nhất v2.
    Notebook PRIVATE + W&B inline theo quyền đã cấp; key tồn tại vĩnh viễn trong version history private; không public notebook.
 2. Kiểm quota + slot live; preflight notebook syntax/argv, resume đủ rank, pin owner/slug/version;
    `python scripts/run_batch.py plan` rồi `launch` (13 method; CANPerFL sau FedAvg r50).

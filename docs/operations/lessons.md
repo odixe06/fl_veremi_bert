@@ -83,3 +83,6 @@ Bài học ở đây là quy tắc rút ra khi chạy thí nghiệm và hạ t�
   Test notebook kiểm cả JSON string CANPerFL và parent thiếu/lệch rank. Audit completion dùng target truyền vào (CANPerFL 10).
 - Watcher poll 1.200 s; lần đầu đọc được r1 sẽ kết thúc có chủ ý để phiên ghi timing rồi nối watcher.
   Collect/audit lỗi trả nonzero để supervisor đánh thức phiên; không để lỗi vận hành ẩn dưới exit0.
+- Inventory 13/11: listing còn có placeholder không `ref` (ngày mặc định 2010-04-01). Gửi status tới slug rỗng gây 403,
+  loại nhầm 9 account rồi plan không đủ slot. Bỏ placeholder không định danh trước query; status lỗi trên ref thật vẫn UNKNOWN.
+  Regression 2 case (placeholder + ref thật; query timeout không biến thành account rảnh) PASS.
