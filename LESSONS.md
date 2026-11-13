@@ -31,3 +31,6 @@
   Regression FULL → pruned tái hiện trong 17 s (`runs/regression_lw_red.log`). Giữ SDPA eager riêng head-dim < 8
   bằng `torch.compiler.disable`; phần còn lại vẫn compile. Test CUDA và logits/gradient fp64 so reference đều pass
   (`runs/regression_lw_green.log`); không đổi scale, dropout hay cấu hình tỉa.
+
+- CANPerFL `state()` cần giữ cả model FedAvg tham chiếu (`p`, `b`) bên cạnh bank cá nhân. Với full client bank > 10M phần tử,
+  snapshot lọc bank sẽ rỗng nếu chỉ lưu bank; thêm reference không đổi train/predict, giúp audit snapshot hữu hạn và resume đúng.

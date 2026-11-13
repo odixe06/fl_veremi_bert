@@ -70,3 +70,16 @@ Bài học ở đây là quy tắc rút ra khi chạy thí nghiệm và hạ t�
   kiểm SHA256, ghi `provenance/source_manifest.json` và source vào output. Audit phải kiểm **base + overlay**, không chỉ Git HEAD.
 - 30/10: Notion connector đã tạo page + upload PDF local được. `replace_content` cần `new_str`, không phải `content`;
   giữ `<page url="...">` của mọi page con. Đọc lại kiểm bảng liên tục + 10 metric + PDF, xem [quy trình](https://github.com/odixe06/fl_dagsnet_veremi_v2/blob/main/docs/operations/notion-results.md).
+
+## FeatureBERT batch (13/11/2026)
+
+- Kaggle `list_kernels` 2.2.5 trả `ref` + `last_run_time`, nhưng `slug`, `enable_gpu`, `current_version_number`
+  có thể giữ mặc định rỗng/false/0. Không suy account rảnh từ `enable_gpu=False` của listing.
+  `scripts/kaggle_inventory.py` đọc status mọi ref, đọc metadata của phiên chưa terminal để xác định GPU;
+  query lỗi loại account khỏi phân bổ. Quota và credential đều account-scoped, không đổi login global.
+- Batch mới chỉ nhận account không có GPU job khác; mỗi push đọc lại quota/slot, giữ ngân sách cho session cùng account.
+  Reply push phải có version trước marker `.pushed`; status/pull dùng owner/slug/version. Intent thiếu marker cần điều tra trước retry.
+- Resume notebook kiểm unique parent + state hai rank cùng round trước decode; copyfile giữ output có quyền ghi.
+  Test notebook kiểm cả JSON string CANPerFL và parent thiếu/lệch rank. Audit completion dùng target truyền vào (CANPerFL 10).
+- Watcher poll 1.200 s; lần đầu đọc được r1 sẽ kết thúc có chủ ý để phiên ghi timing rồi nối watcher.
+  Collect/audit lỗi trả nonzero để supervisor đánh thức phiên; không để lỗi vận hành ẩn dưới exit0.

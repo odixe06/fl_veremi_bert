@@ -76,19 +76,27 @@ print("W&B authenticated")"""
     resume = ""
     if a.resume_kernel:
         resume = f"""prev = [p for p in glob.glob("/kaggle/input/**/{run}/state.pt", recursive=True)]
-assert prev, "resume requested but no {run}/state.pt in inputs"
+assert len(prev) == 1, "resume requested: missing or ambiguous {run}/state.pt"
+parent = Path(prev[0]).parent
+s = torch.load(parent / "state.pt", map_location="cpu", weights_only=True, mmap=True)
+assert s["method"] == "{a.method}" and s["hp"]["rounds"] == {a.rounds} and 0 < s["round"] < {a.rounds}
+other = torch.load(parent / "state_rank1.pt", map_location="cpu", weights_only=True, mmap=True)
+assert other["round"] == s["round"] and len(s["gen"]) == 2, "incomplete rank resume state"
+del s, other
 os.makedirs("/kaggle/working/{run}", exist_ok=True)
 for f in glob.glob(os.path.join(os.path.dirname(prev[0]), "*")):
-    (shutil.copytree(f, os.path.join("/kaggle/working/{run}", os.path.basename(f)), dirs_exist_ok=True) if os.path.isdir(f)
-     else shutil.copy(f, "/kaggle/working/{run}/"))
+    (shutil.copytree(f, os.path.join("/kaggle/working/{run}", os.path.basename(f)), dirs_exist_ok=True,
+                     copy_function=shutil.copyfile) if os.path.isdir(f)
+     else shutil.copyfile(f, os.path.join("/kaggle/working/{run}", os.path.basename(f))))
 print("resumed from", prev[0])
 """
+        yield "code", resume
     yield "code", """t = time.monotonic()
 sys.path.insert(0, "/kaggle/temp/src")
 from core import data as D
 D.build_npy(D.find_root(), "/kaggle/temp/v4npy")    # one reader; every rank then memmaps (V4_NPY)
 print(f"npy cache built in {time.monotonic() - t:.0f}s")"""
-    yield "code", resume + f"""os.environ.update(TORCHINDUCTOR_COMPILE_THREADS="2", PYTHONUNBUFFERED="1", OMP_NUM_THREADS="2",
+    yield "code", f"""os.environ.update(TORCHINDUCTOR_COMPILE_THREADS="1", PYTHONUNBUFFERED="1", OMP_NUM_THREADS="2",
                   PYTORCH_CUDA_ALLOC_CONF="expandable_segments:True",   # GPU near-full: avoid allocator thrash (MobiHet 30/10)
                   V4_NPY="/kaggle/temp/v4npy")
 budget = {a.max_hours} - (time.monotonic() - T0) / 3600

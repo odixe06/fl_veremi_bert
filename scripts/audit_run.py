@@ -88,7 +88,7 @@ def audit(root, support, seed=42, rounds=50):
         hashes[str(p.relative_to(root))] = sha256(p)
     for name in ("config.json", "rounds.jsonl"):
         hashes[name] = sha256(root / name)
-    return dict(status="PASS_BOUNDED", method=cfg["method"], rounds=len(rows), complete=len(rows) == 50,
+    return dict(status="PASS_BOUNDED", method=cfg["method"], rounds=len(rows), complete=len(rows) == rounds,
                 checks=["locked HP/model", "contiguous rounds/LR", "exact full-test per-client class support",
                         "all ten metrics/client quantiles/per-class F1 recomputed", "finite available snapshot tensors"],
                 limits=["No stored per-row predictions: cannot replay predictions into CMs",

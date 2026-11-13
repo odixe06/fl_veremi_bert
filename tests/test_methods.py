@@ -84,6 +84,12 @@ def test_canperfl_finetunes_fedavg_state(tmp_path):
     assert (before == M.evaluate()["global"]).all()                  # untouched clients = the FedAvg model
     assert np.isfinite(M.round(1, 1e-3)["train_loss"])
     assert not torch.equal(M.bank_p[0], p[0])
+    state = M.state()
+    assert torch.equal(state["p"], p[0])  # small snapshot retains FedAvg reference even with large banks
+    M2 = importlib.import_module("methods.canperfl").Method(env)
+    M2.load_state(state)
+    for view, cm in M.evaluate().items():
+        assert (M2.evaluate()[view] == cm).all()
 
 
 def test_tinyproto_aligned_prototypes_do_not_amplify(monkeypatch):
