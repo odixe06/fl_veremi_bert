@@ -34,3 +34,17 @@
 
 - CANPerFL giữ nguyên `state()` của v2 (chỉ bank cá nhân). Ở full 5.343 client, snapshot nhỏ lọc bank > 10M phần tử
   nên rỗng; audit phải ghi rõ thiếu bằng chứng weight thay vì sửa method để phục vụ checker. Không suy finite weights từ CM.
+
+## T4 thật — round đầu batch seed 42 (13/11)
+
+- `nguyetquedo/flb-afpha/1`, source `cb193e6`, 2×T4, 5.343 client, batch 64, group_rows 8.192, compiled.
+  W&B `21522798-uit/fl-veremi-bert/flb-afpha`, r1 lúc **13/11/2026 09:48:22 VN**:
+  **t_train = 573.432 s**, **t_eval = 56.981 s**, tổng **630.413 s**.
+  Bằng chứng live: `runs/batch-watch/first_round.json`, `runs/batch-watch/initial-health.json`.
+- V2 AFPHA seed42 r1 (`../fl_dagsnet_veremi_v2/runs/pulls/fl2-afpha-r2/fl2-afpha-r2/rounds.jsonl`):
+  train 338,735 s, eval 126,393 s ⇒ BERT **1,693× train**, **1,355× train+eval** ở round đầu.
+  Round đầu có compile/warmup; không so với trung bình ổn định v2 (r2–50: train 258,200 s) để chốt hệ số.
+  FACTOR 1,5 của plan là ước lượng trước launch, không phải số đo chung mọi method; plan đã khóa, không sửa từ một điểm warmup.
+- 13 W&B config đã kiểm: world 2, clients 5.343, backend compiled, HP đúng protocol; TinyProto μ 1,5e-4;
+  LwFedNIDS d20/FFN39/4 head, 10.194 tham số. Khi kiểm 09:59 VN chỉ AFPHA có metric r1; các run khác chưa có round metric.
+  Đây là quan sát live, chưa thay final artifact audit/CM.

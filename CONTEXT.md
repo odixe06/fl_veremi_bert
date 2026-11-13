@@ -24,7 +24,7 @@ Code `core/` và `methods/` chép từ v2. Chỉ phần phụ thuộc kiến tr�
 
 ## Trạng thái
 
-Kiểm 13/11/2026 09:23 VN: smoke + 37 test PASS; code public đã push; sửa rate-limit inventory, chuẩn bị controller retry.
+Kiểm 13/11/2026 10:00 VN: 13 kernel v1 RUNNING; AFPHA có r1 T4, timing đã ghi LESSONS; CANPerFL chờ FedAvg r50.
 Xem [bàn giao sống](docs/operations/continue.md). Kết quả: [results](docs/research/results.md).
 
 ## Cần biết → mở
